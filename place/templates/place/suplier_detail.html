@@ -8,12 +8,16 @@
     <p>Фамилия:{{ one_suplier.agent_firstname }}</p>
     <p>Отчество:{{ one_suplier.agent_patronymic }}</p>
 
-    <a href="{% url 'edit_suplier' one_suplier.pk %}" class="btn btn-primary">Редактировать</a>
-    <a href="{% url 'show_suplier' %}" class="btn btn-info">Назад</a>
+<a href="{% url 'show_suplier' %}" class="btn btn-info">Назад</a>
 
+    {% if perms.place.change_supplier %}
+    <a href="{% url 'edit_suplier' one_suplier.pk %}" class="btn btn-primary">Редактировать</a>
+    {% endif %}
+    {% if perms.place.delete_supplier %}
     <form method="post" action="{% url 'delete_suplier' object.pk %}">
         {% csrf_token %}
         <input type="submit" class="btn btn-danger" value="Удалить">
     </form>
+    {% endif %}
 </div>
 {% endblock %}

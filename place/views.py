@@ -8,7 +8,8 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
 from django.contrib.auth import login, logout
-
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
 
 def index(request):
     return render(request, 'place/index.html')
@@ -49,7 +50,7 @@ def show_things(request):
     return render(request,
                   context=context,
                   template_name='place/show_things.html')
-
+@permission_required('place.add_things')
 def add_thing(request):
     if request.method == "POST":
         context = dict()
@@ -74,6 +75,7 @@ def add_thing(request):
         context = {'form': thingsform}
         return render(request, 'place/add_thing.html', context=context)
 
+@login_required()
 def thing_detail(request, thing_id):
     # thing = Things.objects.get(pk=thing_id)
     thing = get_object_or_404(Things, pk=thing_id)
@@ -117,6 +119,10 @@ class SuplierCreateView(CreateView):
     context_object_name = 'form'
     success_url = reverse_lazy('show_suplier')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 class SuplierUpdateView(UpdateView):
     model = Suplier
     form_class = SuplierForm
@@ -125,10 +131,18 @@ class SuplierUpdateView(UpdateView):
     context_object_name = 'form'
     success_url = reverse_lazy('show_suplier')
 
+    @method_decorator(permission_required('place.change_suplier'))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SuplierDeleteView(DeleteView):
     model = Suplier
     success_url = reverse_lazy('show_suplier')
+
+    @method_decorator(permission_required('place.delete_suplier'))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 def user_registration(request):
     if request.method == 'POST':
