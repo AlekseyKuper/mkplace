@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div>
+    <a href="{% url 'index' %}" class="btn btn-primary">Назад</a>
+    <a href="{% url 'add_thing' %}" class="btn btn-primary">Добавить</a>
+    <h1>Список</h1>
+    {% for things in things_list %}
+    <div class="card" style="width: 18rem;">
+        {% if things.photo %}
+        <img src="{{ things.photo.url }}" class="card-img-top" alt="...">
+        {% else %}
+        <img src="/media/image/2023/12/07/photo_2023-09-18_22-29-40.jpg" class="card-img-top" alt="...">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ things.name }}</h5>
+            <p class="card-text">{{ things.price }}</p>
+            <p class="card-text">{{ things.date_create|date:'Y-m-d l'}}</p>
+            <!--            <a href="{{ things.pk }}" class="btn btn-primary">Подробнее</a>-->
+            <a href="{% url 'one_thing' things.pk %}" class="btn btn-primary">Подробнее</a>
+        </div>
+    </div>
+    {% endfor %}
+
+
+</div>
+<div class="container">
+    <div class="row aligh-items-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if things_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ things_list.previous_page_number}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for page in things_list.paginator.page_range %}
+                {% if things_list.number == page %}
+                <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                 {% if things_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ things_list.next_page_number}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="fs-4">Platinum Place</span>
+        </a>
+
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link active" aria-current="page">Домашняя страница</a></li>
+             <li class="nav-item"><a href="{% url 'show_things' %}" class="nav-link">Список продукции</a></li>
+            <li class="nav-item"><a href="{% url 'add_thing' %}" class="nav-link">Добавление продукции</a></li>
+            <li class="nav-item"><a href="{% url 'show_suplier' %}" class="nav-link">Поставщики</a></li>
+            <li class="nav-item"><a href="{% url 'suplier_app' %}" class="nav-link">Добавление поставщика</a></li>
+
+            {% if request.user.is_anonymous %}
+                <li class="nav-item"><a href="{% url 'log_in' %}" class="nav-link">Авторзация</a></li>
+                <li class="nav-item"><a href="{% url 'regis' %}" class="nav-link">Регистрация</a></li>
+            {% else %}
+                <li class="nav-item"><a href="{% url 'log_out' %}" class="nav-link">Выйти из аккаунта</a></li>
+            {% endif %}
+
+        </ul>
+    </header>

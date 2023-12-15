@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавлено {% endblock %}
+{% block content %}
+<div>
+    <p>Имя:{{thing_item.name}}</p>
+    <p>Описание:{{ thing_item.description }}</p>
+    <p>Стоимость:{{ thing_item.price }}</p>
+    <p>Дата истечения:{{ thing_item.date_expired }}</p>
+    <img src="{{ thing_item.photo }}">
+
+
+    <a href="{% url 'show_things' %}" class="btn btn-info">Назад</a>
+</div>
+{% endblock %}

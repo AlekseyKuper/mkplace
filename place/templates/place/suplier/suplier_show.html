@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div>
+
+    <h1>{{ title }}</h1>
+    {{ title }}<br>
+    {{ info }}
+    {% for suplier in suplier_show %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ suplier.title }}</h5>
+            <p class="card-text">{{ suplier.agent_name }}</p>
+            <p class="card-text">{{ suplier.agent_firstname }}</p>
+            <p class="card-text">{{ suplier.agent_patronymic }}</p>
+<!--            <a href="{% url 'one_show_suplier' suplier.pk %}" class="btn btn-primary">Подробнее</a>-->
+            <a href="{{ suplier.get_absolute_url }}" class="btn btn-primary">Подробнее</a>
+
+
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% if page_obj.has_other_pages %}
+<div class="container">
+    <div class="row aligh-items-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ things_list.previous_page_number}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+
+                {% for page in page_obj.paginator.page_range %}
+                {% if page_obj.number == page %}
+                <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                 {% if things_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ things_list.next_page_number}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
