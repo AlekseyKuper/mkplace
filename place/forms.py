@@ -92,3 +92,18 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', }),
     )
 
+class ContactForm(forms.Form):
+    subject = forms.CharField(
+        label='Заголовок письма',
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', },
+        )
+    )
+
+    content = forms.CharField(
+        label='Тело письма',
+        widget=forms.Textarea(
+            attrs={'class': 'form-control',
+                   'rows': 11, }
+        )
+    )

@@ -30,4 +30,7 @@ urlpatterns = [
     path('registration/', user_registration, name='regis'),
     path('login/', user_login, name='log_in'),
     path('logout/', user_logout, name='log_out'),
+    path('email/', contact_email, name='email'),
+    path('api/list/', thing_api_list, name='thing_api_list'),
+    path('api/detail/<int:pk>', thing_api_detail, name='thing_api_detail'),
 ]

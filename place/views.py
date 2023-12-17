@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Things, Suplier
-from .forms import Thingsform, SuplierForm, RegistrationForm, LoginForm
+from .forms import ContactForm, Thingsform, SuplierForm, RegistrationForm, LoginForm
 from .utils import Default_value
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -10,6 +10,16 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
+
+from django.core.mail import send_mail, send_mass_mail
+from django.conf import settings
+
+from django.http import JsonResponse
+from .serializers import ThingsSerializer
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import viewsets
 
 def index(request):
     return render(request, 'place/index.html')
@@ -176,3 +186,53 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('log_in')
+
+def contact_email(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            mail = send_mail(
+                form.cleaned_data['subject'],
+                form.cleaned_data['content'],
+                settings.EMAIL_HOST_USER,
+                ['kupriyashkin95@mail.ru'],
+                fail_silently=False
+            )
+            if mail:
+                return redirect('index')
+    else:
+        form = ContactForm()
+
+    return render(request, 'place/email.html', {'form': form})
+
+@api_view(['GET', 'POST'])
+def thing_api_list(request):
+    if request.method == "GET":
+        thing_list = Things.objects.all()
+        serializer = ThingsSerializer(thing_list, many=True)
+        return Response({'thing_list': serializer.data})
+    elif request.method == 'POST':
+        serializer = ThingsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def thing_api_detail(request, pk, format=None):
+    thing_obj = get_object_or_404(Things, pk=pk)
+    if thing_obj.exist:
+        if request.method == 'GET':
+            serializer = ThingsSerializer(thing_obj)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = ThingsSerializer(thing_obj, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'message': 'Данные успешно изменены', 'thing': serializer.data})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            thing_obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)

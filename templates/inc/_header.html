@@ -16,8 +16,10 @@
             {% if request.user.is_anonymous %}
                 <li class="nav-item"><a href="{% url 'log_in' %}" class="nav-link">Авторзация</a></li>
                 <li class="nav-item"><a href="{% url 'regis' %}" class="nav-link">Регистрация</a></li>
+
             {% else %}
                 <li class="nav-item"><a href="{% url 'log_out' %}" class="nav-link">Выйти из аккаунта</a></li>
+                <li class="nav-item"><a href="{% url 'email' %}" class="nav-link">Обратная связь</a></li>
             {% endif %}
 
         </ul>
