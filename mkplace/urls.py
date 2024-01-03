@@ -21,6 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('place/', include('place.urls')),
+    path('basket/', include('basket.urls')),
     path('admin/', admin.site.urls),
 ]
 

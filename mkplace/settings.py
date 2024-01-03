@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'place.apps.PlaceConfig',
     'rest_framework',
+    'basket',
     ]
 
 MIDDLEWARE = [
@@ -147,3 +148,5 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLC = False
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+BASKET_SESSION_ID = 'basket'

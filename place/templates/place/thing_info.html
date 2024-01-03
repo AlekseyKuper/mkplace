@@ -7,7 +7,15 @@
     <p>Описание:{{ thing_item.description }}</p>
     <p>Стоимость:{{ thing_item.price }}</p>
     <p>Дата истечения:{{ thing_item.date_expired }}</p>
-    <img src="{{ thing_item.photo }}">
+    <img src="{{ thing_item.photo.url }}">
+
+    <div class="container">
+        <form method="post" action="{% url 'add_basket_prod' thing_item.pk %}">
+            {% csrf_token %}
+            {{ basket_form }}
+            <input type="submit" class="btn btn-success" value="Добавить в корзину">
+        </form>
+    </div>
 
 
     <a href="{% url 'show_things' %}" class="btn btn-info">Назад</a>

@@ -20,6 +20,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
+from basket.forms import BasketAddProductForm
+
 
 def index(request):
     return render(request, 'place/index.html')
@@ -89,8 +91,9 @@ def add_thing(request):
 def thing_detail(request, thing_id):
     # thing = Things.objects.get(pk=thing_id)
     thing = get_object_or_404(Things, pk=thing_id)
+    basket_form = BasketAddProductForm()
     # context['thing_item'] = thing
-    return render(request, 'place/thing_info.html', {'thing_item': thing})
+    return render(request, 'place/thing_info.html', {'thing_item': thing, 'basket_form': basket_form})
 
 class SuplierListView(ListView, Default_value):
     model = Suplier
